@@ -1,0 +1,7 @@
+.wp-whois-valid {
+    border: 2px solid green !important;
+}
+
+.wp-whois-invalid {
+    border: 2px solid red !important;
+}
