@@ -15,4 +15,24 @@ jQuery(document).ready(function ($) {
       $("#wp-whois-results").html("Please enter a valid domain");
     }
   });
+
+  // Handle lookup submission
+  jQuery("#wp-whois-lookup-btn").on("click", function (e) {
+    e.preventDefault();
+
+    const whoIsDomain = $("#wp-whois-domain")?.val()?.trim();
+
+    if (isValidDomain(whoIsDomain)) {
+      $("#wp-whois-results").html("");
+    } else {
+      $("#wp-whois-results").html("Please enter a valid domain");
+      return;
+    }
+
+    // Show loading message
+    $("#wp-whois-results").html("Loading...");
+
+    // Perform the AJAX request
+
+  });
 });
