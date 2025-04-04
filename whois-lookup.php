@@ -46,3 +46,70 @@ function wp_whois_lookup_shortcode()
     return ob_get_clean();
 }
 add_shortcode('wp_whois_lookup', 'wp_whois_lookup_shortcode');
+
+/**
+ * Handle the AJAX request for Whois lookup.
+ */
+function wp_whois_lookup_ajax()
+{
+
+    if (!isset($_POST['domain'])) {
+        wp_send_json_error('No domain provided');
+    }
+
+    $domain = sanitize_text_field($_POST['domain']);
+
+    $api_url = "https://rdap.verisign.com/com/v1/domain/" . urlencode($domain);
+    $response = wp_remote_get($api_url);
+
+    if (is_wp_error($response)) {
+        wp_send_json_error('Error fetching data');
+    }
+
+    $body = wp_remote_retrieve_body($response);
+    $data = json_decode($body, true);
+
+    if (!$data || empty($data)) {
+        wp_send_json_error('No data found');
+    }
+
+    $response = [
+        'success' => true,
+        'domain_info' => [
+            'domain_name' => $data['ldhName'] ?? '',
+            'handle' => $data['handle'] ?? '',
+            'status' => $data['status'] ?? [],
+        ],
+        'important_dates' => [
+            'registered_on' => $data['events'][0]['eventDate'] ?? '',
+            'expires_on' => $data['events'][1]['eventDate'] ?? '',
+            'updated_on' => $data['events'][2]['eventDate'] ?? '',
+            'last_rdap_update' => $data['events'][3]['eventDate'] ?? '',
+        ],
+        'links' => [
+            'rdap_self' => $data['links'][0]['href'] ?? '',
+            'rdap_cloudflare' => $data['links'][1]['href'] ?? '',
+        ],
+        'registrar' => [
+            'name' => $data['entities'][0]['vcardArray'][1][1][3] ?? '',
+            'iana_id' => $data['entities'][0]['publicIds'][0]['identifier'] ?? '',
+            'abuse_email' => $data['entities'][0]['entities'][0]['vcardArray'][1][3][3] ?? '',
+            'abuse_phone' => $data['entities'][0]['entities'][0]['vcardArray'][1][2][3] ?? '',
+        ],
+        'name_servers' => array_map(fn($ns) => $ns['ldhName'], $data['nameservers'] ?? []),
+        'secure_dns' => [
+            'delegation_signed' => $data['secureDNS']['delegationSigned'] ?? false,
+        ],
+        'notices' => array_map(fn($notice) => [
+            'title' => $notice['title'] ?? '',
+            'description' => $notice['description'][0] ?? '',
+            'link' => $notice['links'][0]['href'] ?? '',
+        ], $data['notices'] ?? []),
+        'raw_data' => $data,
+    ];
+
+    wp_send_json_success($response);
+    wp_die();
+}
+add_action('wp_ajax_wp_whois_lookup', 'wp_whois_lookup_ajax');
+add_action('wp_ajax_nopriv_wp_whois_lookup', 'wp_whois_lookup_ajax');

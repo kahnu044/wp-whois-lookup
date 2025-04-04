@@ -33,6 +33,19 @@ jQuery(document).ready(function ($) {
     $("#wp-whois-results").html("Loading...");
 
     // Perform the AJAX request
-
+    $.ajax({
+      url: wp_whois.ajaxurl,
+      type: "POST",
+      data: {
+        action: "wp_whois_lookup",
+        domain: whoIsDomain,
+      },
+      success: function (response) {
+        $("#wp-whois-results").html(response);
+      },
+      error: function () {
+        $("#wp-whois-results").html("<p>Error retrieving WHOIS data.</p>");
+      },
+    });
   });
 });
