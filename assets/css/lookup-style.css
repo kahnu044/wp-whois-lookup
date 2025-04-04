@@ -7,8 +7,7 @@
 }
 
 .wp-whois-container {
-    max-width: 600px;
-    margin: 30px auto;
+    width: 100%;
     background: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -20,6 +19,7 @@
 }
 
 .wp-whois-container .wp-whois-section {
+    text-align: left;
     margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -41,4 +41,8 @@
 .wp-whois-info strong {
     display: inline-block;
     width: 150px;
+}
+
+#wp-whois-results{
+    margin-top: 20px;
 }

@@ -48,8 +48,8 @@ function wp_whois_lookup_shortcode($atts)
                 <input type="text" id="wp-whois-domain" name="wp-whois-domain" placeholder="Enter domain name" required>
                 <button type="submit" id="wp-whois-lookup-btn">Lookup</button>
             </form>
+            <div id="wp-whois-results"></div>
         </div>
-        <div id="wp-whois-results"></div>
     </div>
 <?php
     return ob_get_clean();
