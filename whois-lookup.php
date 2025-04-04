@@ -79,16 +79,12 @@ function wp_whois_lookup_ajax()
             'domain_name' => $data['ldhName'] ?? '',
             'handle' => $data['handle'] ?? '',
             'status' => $data['status'] ?? [],
-        ],
-        'important_dates' => [
+            'domain_id' => $data['handle'] ?? [],
             'registered_on' => $data['events'][0]['eventDate'] ?? '',
             'expires_on' => $data['events'][1]['eventDate'] ?? '',
             'updated_on' => $data['events'][2]['eventDate'] ?? '',
             'last_rdap_update' => $data['events'][3]['eventDate'] ?? '',
-        ],
-        'links' => [
-            'rdap_self' => $data['links'][0]['href'] ?? '',
-            'rdap_cloudflare' => $data['links'][1]['href'] ?? '',
+            'name_servers' => array_map(fn($ns) => $ns['ldhName'], $data['nameservers'] ?? []),
         ],
         'registrar' => [
             'name' => $data['entities'][0]['vcardArray'][1][1][3] ?? '',
@@ -96,7 +92,10 @@ function wp_whois_lookup_ajax()
             'abuse_email' => $data['entities'][0]['entities'][0]['vcardArray'][1][3][3] ?? '',
             'abuse_phone' => $data['entities'][0]['entities'][0]['vcardArray'][1][2][3] ?? '',
         ],
-        'name_servers' => array_map(fn($ns) => $ns['ldhName'], $data['nameservers'] ?? []),
+        'links' => [
+            'rdap_self' => $data['links'][0]['href'] ?? '',
+            'rdap_cloudflare' => $data['links'][1]['href'] ?? '',
+        ],
         'secure_dns' => [
             'delegation_signed' => $data['secureDNS']['delegationSigned'] ?? false,
         ],

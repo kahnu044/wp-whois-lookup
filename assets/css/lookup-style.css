@@ -5,3 +5,40 @@
 .wp-whois-invalid {
     border: 2px solid red !important;
 }
+
+.wp-whois-container {
+    max-width: 600px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.wp-whois-container h2 {
+    text-align: center;
+}
+
+.wp-whois-container .wp-whois-section {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background: #fff;
+}
+
+.wp-whois-container .wp-whois-section h3 {
+    margin: 0;
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.wp-whois-info {
+    padding: 10px 0;
+}
+
+.wp-whois-info strong {
+    display: inline-block;
+    width: 150px;
+}

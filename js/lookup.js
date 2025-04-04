@@ -41,7 +41,80 @@ jQuery(document).ready(function ($) {
         domain: whoIsDomain,
       },
       success: function (response) {
-        $("#wp-whois-results").html(response);
+        if (!response || !response?.success) {
+          $("#wp-whois-results").html("Error retrieving WHOIS data.");
+          return;
+        }
+
+        let data = response?.data;
+        let html = "";
+
+        html += `<div class="wp-whois-container">
+          <h2>WHOIS Search Results</h2>
+
+          <div class="wp-whois-section">
+            <h3>Domain Information</h3>
+            <div class="wp-whois-info">
+              <strong>Name:</strong> <span id="domainName">${
+                data?.domain_info?.domain_name
+              }</span>
+            </div>
+            <div class="wp-whois-info">
+              <strong>Registered On:</strong>
+              <span id="registeredOn">${data?.domain_info?.registered_on}</span>
+            </div>
+            <div class="wp-whois-info">
+              <strong>Expires On:</strong>
+              <span id="expiresOn">${data?.domain_info?.expires_on}</span>
+            </div>
+            <div class="wp-whois-info">
+              <strong>Updated On:</strong>
+              <span id="updatedOn">${data?.domain_info?.updated_on}</span>
+            </div>
+             <div class="wp-whois-info">
+              <strong>Last RDAP Update:</strong>
+              <span id="updatedOn">${data?.domain_info?.last_rdap_update}</span>
+            </div>
+            <div class="wp-whois-info">
+              <strong>Name Servers:</strong>
+              <span id="nameServers">${data.domain_info?.name_servers?.join(
+                ", "
+              )}</span>
+            </div>
+
+             <div class="wp-whois-info">
+              <strong>Status:</strong>
+              <span id="nameServers">${data?.domain_info?.status?.join(
+                ", "
+              )}</span>
+            </div>
+          </div>
+
+          <div class="wp-whois-section">
+            <h3>Registrant Contact</h3>
+            <div class="wp-whois-info">
+              <strong>Name:</strong>
+              <span id="registrantName">${data?.registrar?.name}</span>
+            </div>
+            <div class="wp-whois-info">
+              <strong>Organization:</strong>
+              <span id="organization">${data?.registrar?.name}</span>
+            </div>
+            <div class="wp-whois-info">
+              <strong>Abuse Phone:</strong>
+              <span id="abusePhone">${data?.registrar?.abuse_phone
+                ?.split(":")
+                ?.pop()}</span>
+            </div>
+            <div class="wp-whois-info">
+              <strong>Abuse Email:</strong>
+              <span id="abuseEmail">${data?.registrar?.abuse_email}</span>
+            </div>
+
+          </div>
+        </div>`;
+
+        $("#wp-whois-results").html(html);
       },
       error: function () {
         $("#wp-whois-results").html("<p>Error retrieving WHOIS data.</p>");
