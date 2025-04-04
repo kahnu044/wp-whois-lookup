@@ -30,16 +30,25 @@ add_action('wp_enqueue_scripts', 'wp_whois_lookup_enqueue_scripts');
  *
  * @return string HTML output of the form and results.
  */
-function wp_whois_lookup_shortcode()
+function wp_whois_lookup_shortcode($atts)
 {
+    $atts = shortcode_atts(array(
+        'align' => 'center',
+    ), $atts, 'wp_whois_lookup');
+
+    $allowed_alignments = array('left', 'center', 'right');
+    $align = in_array(strtolower($atts['align']), $allowed_alignments) ? strtolower($atts['align']) : 'center';
+
     ob_start();
 ?>
     <div class="wp-whois-lookup-wrapper">
-        <h2>Whois Lookup</h2>
-        <form id="whois-lookup-form">
-            <input type="text" id="wp-whois-domain" name="wp-whois-domain" placeholder="Enter domain name" required>
-            <button type="submit" id="wp-whois-lookup-btn">Lookup</button>
-        </form>
+        <div id="wp-whois-lookup-form" style="text-align: <?php echo esc_attr($align); ?>;">
+            <h2>Whois Lookup</h2>
+            <form id="whois-lookup-form">
+                <input type="text" id="wp-whois-domain" name="wp-whois-domain" placeholder="Enter domain name" required>
+                <button type="submit" id="wp-whois-lookup-btn">Lookup</button>
+            </form>
+        </div>
         <div id="wp-whois-results"></div>
     </div>
 <?php
