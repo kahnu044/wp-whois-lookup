@@ -39,13 +39,20 @@ function wp_whois_lookup_shortcode($atts)
     $allowed_alignments = array('left', 'center', 'right');
     $align = in_array(strtolower($atts['align']), $allowed_alignments) ? strtolower($atts['align']) : 'center';
 
+    // get domain from URL if available
+    if (isset($_GET['domain'])) {
+        $domain = sanitize_text_field($_GET['domain']);
+    } else {
+        $domain = '';
+    }
+
     ob_start();
 ?>
     <div class="wp-whois-lookup-wrapper">
         <div id="wp-whois-lookup-form" style="text-align: <?php echo esc_attr($align); ?>;">
             <h2>Whois Lookup</h2>
             <form id="whois-lookup-form">
-                <input type="text" id="wp-whois-domain" name="wp-whois-domain" placeholder="Enter domain name" required>
+                <input type="text" id="wp-whois-domain" value="<?php echo $domain; ?>" name="wp-whois-domain" placeholder="Enter domain name" required>
                 <button type="submit" id="wp-whois-lookup-btn">Lookup</button>
             </form>
             <div id="wp-whois-results"></div>
