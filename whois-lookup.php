@@ -75,7 +75,21 @@ function wp_whois_lookup_ajax()
 
     $domain = sanitize_text_field($_POST['domain']);
 
-    $api_url = "https://rdap.verisign.com/com/v1/domain/" . urlencode($domain);
+    // Extract TLD
+    $parts = explode('.', $domain);
+    $tld = end($parts);
+
+    // RDAP endpoints for different TLDs
+    $rdap_servers = [
+        'com' => 'https://rdap.verisign.com/com/v1/domain/',
+        'net' => 'https://rdap.verisign.com/net/v1/domain/',
+        'org' => 'https://rdap.publicinterestregistry.org/rdap/domain/'
+    ];
+
+    $api_url = isset($rdap_servers[$tld])
+        ? $rdap_servers[$tld] . urlencode($domain)
+        : "https://rdap.verisign.com/com/v1/domain/" . urlencode($domain);
+
     $response = wp_remote_get($api_url);
 
     if (is_wp_error($response)) {
