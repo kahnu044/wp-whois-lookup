@@ -4,7 +4,7 @@ Tags: whois, domain lookup, rdap, domain search, ajax
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -55,8 +55,11 @@ Optional attribute to align the form:
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.1.0 =
+* Obfuscated RDAP URLs using base64 encoding for better readability security
+* Minor bug fixes and code cleanup
 
+= 1.0.0 =
 - Initial release
 - WHOIS Lookup via AJAX using Verisign RDAP API
 - Responsive search form with real-time results
